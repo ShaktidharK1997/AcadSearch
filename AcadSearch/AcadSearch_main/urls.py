@@ -10,4 +10,6 @@ urlpatterns = [
     path('', views.search_articles, name='search_articles'),
     path('search/', views.search_articles, name='search_articles'),
     path('paper/', views.get_paper_info, name= 'search_paper'),
+    path('signin/', views.signin, name='signin'),
+    path('signup/', views.signup, name='signup'),
 ]

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './searchpage.css';
 
 export default function SearchPage() {
@@ -23,8 +24,18 @@ export default function SearchPage() {
 
     };
 
+    const navigate = useNavigate();
+
+    const handlesignin = () => {
+        navigate('/signin');
+    }
+
     return (
         <div className = 'search-page'>
+        <div className = 'header'>
+            <h1>AcadSearch</h1>
+            <button className = 'signin-button' onClick={handlesignin}>Sign In</button>
+        </div>
         <div className = 'search-container'>
             <input className='search-input'
             type="text"

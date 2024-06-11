@@ -3,7 +3,12 @@ import requests
 from requests.exceptions import RequestException
 from django.http import JsonResponse
 import time
-
+from django.contrib.auth import authenticate, login
+from django.views.decorators.csrf import csrf_exempt
+import json
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.models import User
+from AcadSearch_main.models import Profile
 # Create your views here.
 
 #Remove Hardcoded values later
@@ -220,3 +225,56 @@ def rate_limiting_with_exponential_backoff(url, params, headers = None,max_retri
             time.sleep(wait_time)
             wait_time *= backoff_factor
             retries += 1
+
+# Utility function to get tokens for a user
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
+
+@csrf_exempt
+def signup(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            username = data.get('email')
+            password = data.get('password')
+            name = data.get('name')
+            institution = data.get('institution')
+            dob = data.get('dob')
+        except (json.JSONDecodeError, KeyError):
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({'error': 'User already exists'}, status=400)
+
+        user = User.objects.create_user(username=username, email=username, password=password)
+        Profile.objects.create(user=user, institution=institution, dob=dob)
+        
+        return JsonResponse({'message': 'User created successfully'}, status=201)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+@csrf_exempt
+def signin(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            username = data.get('email')
+            password = data.get('password')
+        except (json.JSONDecodeError, KeyError):
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            tokens = get_tokens_for_user(user)
+            return JsonResponse({'message': 'Login successful', 'token': tokens['access']}, status=200)
+        else:
+            return JsonResponse({'error': 'Invalid credentials'}, status=401)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
