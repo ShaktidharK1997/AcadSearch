@@ -11,7 +11,6 @@ export default function SearchPage() {
     const storedUser = localStorage.getItem('user');
     const user = storedUser && storedUser !== 'undefined' ? JSON.parse(storedUser) : null;
 
-
     const handleSearch = async () => {
         const apiUrl = `${base_url}/AcadSearch/search/?query=${query}`;
 
