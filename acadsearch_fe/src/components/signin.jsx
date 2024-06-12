@@ -30,6 +30,7 @@ export default function Signin() {
                 const data = await response.json();
                 // Store the token securely, consider using httpOnly cookies
                 localStorage.setItem('authToken', data.token); 
+                localStorage.setItem('user', JSON.stringify(data.email));
                 navigate('/search');
             } else {
                 alert('Invalid credentials');

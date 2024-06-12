@@ -278,3 +278,12 @@ def signin(request):
             return JsonResponse({'error': 'Invalid credentials'}, status=401)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def profile(request):
+    if request.user.is_authenticated:
+        user = request.user
+        profile = Profile.objects.get(username=user)
+        return JsonResponse({'name': user.username, 'email': user.email, 'institution': profile.institution, 'dob': profile.dob})
+    else:
+        return JsonResponse({'error': 'User not authenticated'}, status=401)
