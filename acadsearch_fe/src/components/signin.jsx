@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 export default function Signin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -30,7 +31,7 @@ export default function Signin() {
                 const data = await response.json();
                 // Store the token securely, consider using httpOnly cookies
                 localStorage.setItem('authToken', data.token); 
-                localStorage.setItem('user', JSON.stringify(data.email));
+                localStorage.setItem('user', (email));
                 navigate('/search');
             } else {
                 alert('Invalid credentials');
