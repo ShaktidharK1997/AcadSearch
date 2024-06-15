@@ -9,6 +9,9 @@ import json
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from AcadSearch_main.models import Profile
+from django.contrib.auth.decorators import login_required
+from django.utils.timezone import now, timedelta
+from AcadSearch_main.models import UserSession
 # Create your views here.
 
 #Remove Hardcoded values later
@@ -287,3 +290,16 @@ def profile(request):
         return JsonResponse({'name': user.username, 'email': user.email, 'institution': profile.institution, 'dob': profile.dob})
     else:
         return JsonResponse({'error': 'User not authenticated'}, status=401)
+    
+@login_required
+def update_activity(request):
+    session, created = UserSession.objects.get_or_create(user=request.user)
+    session.update_activity()
+    return JsonResponse({'status': 'activity updated'})
+
+#@login_required
+def get_online_users(request):
+    threshold = now() - timedelta(minutes=5)
+    online_users = UserSession.objects.filter(last_activity__gte=threshold).values('user__username')
+    return JsonResponse({'online_users': list(online_users)})
+    
