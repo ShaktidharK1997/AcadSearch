@@ -285,8 +285,8 @@ def signin(request):
             tokens = get_tokens_for_user(user)
 
             redis_conn = get_redis_connection("default")
-            user_key = f"user:{user.username}:online"
-            redis_conn.set(user_key, "true", ex=60)  # TTL of 1 minute
+            user_key = f"{user.username}"
+            redis_conn.set(user_key, "true", ex=240)  # TTL of 1 minute
             
             return JsonResponse({'message': 'Login successful', 'token': tokens['access']}, status=200)
         else:
@@ -322,9 +322,10 @@ def profile(request):
 
 def get_online_users(request):
     redis_conn = get_redis_connection("default")
-    keys = redis_conn.keys("user:*:online")
-    online_user_ids = [int(key.decode().split(':')[1]) for key in keys]
-    online_users = User.objects.filter(id__in=online_user_ids).values('username')
-    return JsonResponse({'online_users': list(online_users)})
+    keys = redis_conn.keys("*")  # Retrieve all keys
+    print("Retrieved keys:", keys)  # Debugging line to print the keys
 
-    
+    online_user_ids = [key.decode('utf-8') for key in keys]  # Decode keys to strings
+    print("Decoded user IDs:", online_user_ids)  # Debugging line to print the decoded keys
+
+    return JsonResponse({'online_users': online_user_ids})

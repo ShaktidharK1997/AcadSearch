@@ -23,7 +23,7 @@ const OnlineUsers = () => {
         };
         
         fetchOnlineUsers(); // Initial fetch
-        const interval = setInterval(fetchOnlineUsers, 6000); // Poll every minute
+        const interval = setInterval(fetchOnlineUsers, 12000); // Poll every minute
 
         return () => clearInterval(interval); // Clean up on unmount
     }, []);
@@ -33,7 +33,7 @@ const OnlineUsers = () => {
             <h3>Online Users</h3>
             <ul>
                 {onlineUsers.map(user => (
-                    <li key={user.username}>{user.username}</li>
+                    <li key={user}>{user}</li>
                 ))}
             </ul>
         </div>
