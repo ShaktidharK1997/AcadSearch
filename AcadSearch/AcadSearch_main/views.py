@@ -141,6 +141,11 @@ def get_bulk_paper_details(paper_ids):
 def search_articles(request):
     query = request.GET.get('query', '')
 
+    if request.user.is_authenticated:
+        redis_conn = get_redis_connection("default")
+        user_key = f"user:{request.user.username}:online"
+        redis_conn.set(user_key, "true", ex=60)  # Reset TTL to 1 minute
+
     # Prepare to fetch results from Semantic Scholar
     query_params = {'query': query, 'limit': 20}
     api_results_semanticsearch = make_semantic_scholar_request('paper/search', query_params=query_params)
@@ -263,6 +268,7 @@ def signup(request):
 
 
 @csrf_exempt
+
 def signin(request):
     if request.method == 'POST':
         try:
@@ -277,6 +283,11 @@ def signin(request):
         if user is not None:
             login(request, user)
             tokens = get_tokens_for_user(user)
+
+            redis_conn = get_redis_connection("default")
+            user_key = f"user:{user.username}:online"
+            redis_conn.set(user_key, "true", ex=60)  # TTL of 1 minute
+            
             return JsonResponse({'message': 'Login successful', 'token': tokens['access']}, status=200)
         else:
             return JsonResponse({'error': 'Invalid credentials'}, status=401)
@@ -300,6 +311,7 @@ def profile(request):
                 'institution': profile.institution,
                 'dob': profile.dob
             })
+        
         except User.DoesNotExist:
             return JsonResponse({'error': 'User does not exist'}, status=404)
         except Profile.DoesNotExist:

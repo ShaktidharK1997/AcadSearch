@@ -1,17 +1,130 @@
-.search-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; 
-    padding: 20px;
-    margin-bottom: 20px;
-    width: 100%; 
-  }
+/* General styles */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+}
 
-  .results-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-  
+.search-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  padding: 10px 20px;
+  background-color: #0073e6;
+  color: white;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.header button {
+  background-color: white;
+  color: #0073e6;
+  border: 1px solid #0073e6;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header button:hover {
+  background-color: #0073e6;
+  color: white;
+}
+
+.search-container {
+  display: flex;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+  font-size: 16px;
+}
+
+.search-button {
+  padding: 10px 20px;
+  border: 1px solid #0073e6;
+  background-color: #0073e6;
+  color: white;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #005bb5;
+}
+
+.results-container {
+  width: 100%;
+  max-width: 800px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.paper {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.paper:last-child {
+  border-bottom: none;
+}
+
+.paper h4 {
+  margin: 0;
+  color: #0073e6;
+}
+
+.paper p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.online-users-container {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.online-users-container h3 {
+  margin-top: 0;
+  color: #0073e6;
+}
+
+.online-users-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.online-users-container ul li {
+  padding: 5px 0;
+  color: #555;
+}
