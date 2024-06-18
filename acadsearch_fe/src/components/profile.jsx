@@ -28,7 +28,7 @@ export default function Profile() {
 
             if (response.ok) {
                 const data = await response.json();
-                setuserDetails(data.user);
+                setuserDetails(data);
             } else {
                 alert('Invalid credentials');
             }

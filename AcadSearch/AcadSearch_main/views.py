@@ -284,14 +284,28 @@ def signin(request):
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 @csrf_exempt
-def profile(request):
-    if request.user.is_authenticated:
-        user = request.user
-        profile = Profile.objects.get(username=user)
-        return JsonResponse({'name': user.username, 'email': user.email, 'institution': profile.institution, 'dob': profile.dob})
-    else:
-        return JsonResponse({'error': 'User not authenticated'}, status=401)
 
+def profile(request):
+    if request.method == 'GET':
+        username = request.GET.get('user')
+        if not username:
+            return JsonResponse({'error': 'Username parameter is missing'}, status=400)
+
+        try:
+            user = User.objects.get(username=username)
+            profile = Profile.objects.get(user=user)
+            return JsonResponse({
+                'name': user.username,
+                'email': user.email,
+                'institution': profile.institution,
+                'dob': profile.dob
+            })
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User does not exist'}, status=404)
+        except Profile.DoesNotExist:
+            return JsonResponse({'error': 'Profile does not exist'}, status=404)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
 #@login_required
 
 def get_online_users(request):
