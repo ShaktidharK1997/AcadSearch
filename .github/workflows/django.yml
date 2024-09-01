@@ -27,5 +27,5 @@ jobs:
         pip install -r requirements.txt
     - name: Run Test
       run: |
-        cd AcadSearch/AcadSearch_main
+        cd AcadSearch
         python manage.py test
