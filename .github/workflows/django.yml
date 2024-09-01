@@ -25,7 +25,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Run Tests
-      working-directory: ./AcadSearch_main
+    - name: Run Test
       run: |
+        cd AcadSearch/AcadSearch_main
         python manage.py test
